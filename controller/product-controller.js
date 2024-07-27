@@ -20,6 +20,16 @@ const getProducts = async (req, res) => {
 const createProduct = async (req, res) => {
   const { name, price, des, category, imageURL } = req.body;
 
+  const apikey = req.query.apikey;
+
+  console.log(apikey);
+  if (apikey != process.env.API_KEY) {
+    return res.json({
+      status: "Failure",
+      message: "Access Denied",
+    });
+  }
+
   try {
     const newProduct = await Product.create({
       name: name,
@@ -42,6 +52,15 @@ const createProduct = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
+  const apikey = req.query.apikey;
+
+  if (apikey != process.env.API_KEY) {
+    res.json({
+      status: "Failure",
+      message: "Access Denied",
+    });
+  }
+
   try {
     const { id } = req.params;
 
@@ -67,9 +86,16 @@ const updateProduct = async (req, res) => {
 };
 
 const deleteProduct = async (req, res) => {
-  try {
-    const { id } = req.params;
+  const { id } = req.params;
+  const apikey = req.query.apikey;
 
+  if (apikey != process.env.API_KEY) {
+    res.json({
+      status: "Failure",
+      message: "Access Denied",
+    });
+  }
+  try {
     const product = await Product.findByIdAndDelete(id);
 
     if (!product) {
