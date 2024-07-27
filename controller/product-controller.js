@@ -18,7 +18,7 @@ const getProducts = async (req, res) => {
 };
 
 const createProduct = async (req, res) => {
-  const { name, price, des, category } = req.body;
+  const { name, price, des, category, imageURL } = req.body;
 
   try {
     const newProduct = await Product.create({
@@ -26,6 +26,7 @@ const createProduct = async (req, res) => {
       price: price,
       category: category,
       description: des,
+      imageURL: imageURL,
     });
 
     res.json({
